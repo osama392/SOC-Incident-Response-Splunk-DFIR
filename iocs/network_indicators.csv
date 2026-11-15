@@ -1,0 +1,9 @@
+indicator_type,value,protocol,role,notes
+IP,192.168.16.5,TCP,Adversary C2 / Attacker Node,Origin of brute force and reverse shell connections
+IP,192.168.20.10,TCP/HTTP,Compromised Linux Web Server,Apache2/Ubuntu 18.04 hosting vulnerable endpoints
+IP,192.168.16.3,TCP/RDP/SMB,Compromised Windows Client01,Target of OpenSSH & RDP brute force; payload dropped
+IP,192.168.16.4,TCP/RDP/SMB,Compromised Windows Client02,Target of Pass-the-Hash attack via ADMIN$ share
+Port,4444,TCP,Reverse Shell Listener,Target port on adversary machine for Python reverse shell
+Port,3389,TCP,RDP,Target of brute-force remote desktop logons (Event 4625/4624)
+Port,22,TCP,SSH,Target of OpenSSH automated trial-and-error password attempts
+Port,445,TCP,SMB,Exploited for IPC$ and ADMIN$ share access (Event 5140)

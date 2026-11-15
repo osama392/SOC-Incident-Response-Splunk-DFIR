@@ -1,0 +1,28 @@
+// ==============================================================================
+// SPLUNK DETECTION RULES - INCIDENT INC2025-0001-001 POST-INCIDENT HARDENING
+// ==============================================================================
+
+// Rule 1: High-Frequency RDP / Windows Authentication Brute-Force
+index=wineventlog source="WinEventLog:Security" EventCode=4625
+| stats count by src_ip, ComputerName, user
+| where count > 10
+| eval Alert_Title="Potential RDP/Windows Brute Force Attack Detected"
+| table _time, Alert_Title, src_ip, ComputerName, user, count
+
+// Rule 2: Web Shell Upload & Execution Detection
+index=web sourcetype="access_combined" (uri_path="*.php*" AND method="POST")
+| eval is_upload=if(match(uri_path, "upload"), 1, 0)
+| where is_upload=1
+| stats count values(uri_path) by src_ip, status
+
+// Rule 3: Suspicious SMB Administrative Share Access (Pass-the-Hash / Lateral Movement)
+index=wineventlog source="WinEventLog:Security" EventCode=5140 ShareName="*ADMIN$*" OR ShareName="*IPC$*"
+| stats count by _time, IpAddress, ComputerName, ShareName, SubjectUserName
+| where count > 3
+| eval Description="Suspicious Administrative Share Access via SMB"
+
+// Rule 4: OpenSSH Operational Repeated Authentication Disconnects
+index=* source="WinEventLog:OpenSSH/Operational" "fail*"
+| stats count by host, source, EventCode
+| where count > 20
+| eval Alert="Automated OpenSSH Credential Spray / Brute-Force Activity"

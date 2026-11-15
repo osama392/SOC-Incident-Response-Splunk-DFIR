@@ -1,0 +1,5 @@
+# Malicious Artifact SHA-256 Hashes
+# Incident ID: INC2025-0001-001
+
+dec0c35aa0f9a8dc388e8a9eb34fff46c3b9f3787cb2ffc6247728dd788aef88  shell.php (Insecure file upload reverse webshell)
+a1666d25afc9aa46524f124b64c6f253e48c62d0e5fcf30a74ac8e8e1791c706  file.exe (Metasploit Meterpreter 64-bit payload)
